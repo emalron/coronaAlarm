@@ -40,6 +40,7 @@ func SelectorToData(f *File) *Profile {
 
 func main() {
     args := os.Args[1:]
+    argc := len(args)
 
     // f, err := os.Open("a.html")
     res, err := http.Get("http://ncov.mohw.go.kr/bdBoardList.do?brdId=1&brdGubun=12")
@@ -81,7 +82,11 @@ func main() {
 
     for _, v := range output {
         for _, r := range v.route {
-            if strings.Contains(r, args[0]) {
+            if argc > 0 {
+                if strings.Contains(r, args[0]) {
+                    fmt.Println(r)
+                }
+            } else {
                 fmt.Println(r)
             }
         }
