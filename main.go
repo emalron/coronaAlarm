@@ -14,7 +14,7 @@ func main() {
     router.HandleFunc("/v1/search/{city}", callback)
     router.HandleFunc("/v1/search/{city}/{district}", callback)
     http.Handle("/", headerMiddleWare(router))
-    err := http.ListenAndServe(":8800", nil)
+    err := http.ListenAndServe(":8001", nil)
     if err != nil {
         fmt.Fprintf(os.Stderr, "http error", err)
     }
@@ -44,7 +44,6 @@ func MakeJSONString(data []Profile) string {
         fmt.Println("MakeJSONString error: ", err)
     }
     jsonString := string(jsonByte)
-    fmt.Println(jsonString)
     return jsonString
 }
 
