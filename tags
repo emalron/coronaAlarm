@@ -4,9 +4,14 @@
 !_TAG_PROGRAM_NAME	Exuberant Ctags	//
 !_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
 !_TAG_PROGRAM_VERSION	5.9~svn20110310	//
-File	main.go	/^type File struct {$/;"	t
-PrintCon	main.go	/^func PrintCon(f *File) {$/;"	f
-Profile	main.go	/^type Profile struct {$/;"	t
-SelectorToData	main.go	/^func SelectorToData(f *File) *Profile {$/;"	f
+File	process.go	/^type File struct {$/;"	t
+Filter	process.go	/^func Filter(data []Profile, index string) []Profile {$/;"	f
+GetData	process.go	/^func GetData() []Profile {$/;"	f
+MakeJSONString	main.go	/^func MakeJSONString(data []Profile) string {$/;"	f
+PrintCon	process.go	/^func PrintCon(f *File) {$/;"	f
+Profile	process.go	/^type Profile struct {$/;"	t
+SelectorToData	process.go	/^func SelectorToData(f *File) Profile {$/;"	f
+callback	main.go	/^func callback(w http.ResponseWriter, r *http.Request) {$/;"	f
 main	main.go	/^func main() {$/;"	f
 main	main.go	/^package main$/;"	p
+main	process.go	/^package main$/;"	p
