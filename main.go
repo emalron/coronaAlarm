@@ -13,7 +13,7 @@ func main() {
     router.HandleFunc("/v1/search", callback)
     router.HandleFunc("/v1/search/{city}", callback)
     router.HandleFunc("/v1/search/{city}/{district}", callback)
-    http.Handle("/", router)
+    http.Handle("/", headerMiddleWare(router))
     err := http.ListenAndServe(":8000", nil)
     if err != nil {
         fmt.Fprintf(os.Stderr, "http error", err)
@@ -47,3 +47,18 @@ func MakeJSONString(data []Profile) string {
     fmt.Println(jsonString)
     return jsonString
 }
+
+func headerMiddleWare(h http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Access-Control-Allow-Origin", "*")
+		w.Header().Set("Access-Control-Allow-Methods", "POST, GET, OPTIONS")
+		w.Header().Set("Access-Control-Allow-Headers", "Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With")
+		if r.Method == "OPTIONS" {
+			w.WriteHeader(http.StatusOK)
+			return
+		}
+		h.ServeHTTP(w,r)
+	})
+}
+
+

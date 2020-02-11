@@ -12,6 +12,7 @@ PrintCon	process.go	/^func PrintCon(f *File) {$/;"	f
 Profile	process.go	/^type Profile struct {$/;"	t
 SelectorToData	process.go	/^func SelectorToData(f *File) Profile {$/;"	f
 callback	main.go	/^func callback(w http.ResponseWriter, r *http.Request) {$/;"	f
+headerMiddleWare	main.go	/^func headerMiddleWare(h http.Handler) http.Handler {$/;"	f
 main	main.go	/^func main() {$/;"	f
 main	main.go	/^package main$/;"	p
 main	process.go	/^package main$/;"	p

@@ -6,9 +6,20 @@
     <body>
         <div id="root">
             <form v-on:submit="test">
-                <div>{{first}} 곱하기 {{second}} 는 ? </div>
-                <input type="number" ref="answer" v-model="input"> <button type="submit" >입력</button>
-                <div>{{result}}</div>
+                <div>우리 동네에 코로나 환자가 지나갔을까? </div>
+                <input type="text" ref="answer" v-model="input"> <button type="submit" >입력</button>
+                <div>
+                    <ul>
+                        <li v-for="item in items">
+                            <h5>{{item.title}}</h5>
+                            <ul>
+                                <li v-for="r in item.route">
+                                    {{r}}
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
             </form>
         </div>
     </body>
@@ -16,27 +27,46 @@
         const app = new Vue({
             el: '#root',
             data: {
-                first: Math.ceil(Math.random() * 9),
-                second:Math.ceil(Math.random() * 9),
+                items: [],
                 input: "",
                 result: "",
             },
             methods: {
                 test: function(e) {
                     e.preventDefault();
-                    
-                    if(this.input == this.first * this.second) {
-                        this.result = "정답"
-                        this.first = Math.ceil(Math.random() * 9);
-                        this.second = Math.ceil(Math.random() * 9);
-                    } else {
-                        this.result = "땡"
-                    }
-                    
-                    this.input = "";
-                    this.$refs.answer.focus();
+                    let inputs = this.input.split(' ').slice(0,2) 
+                    getData(this, inputs, function(obj, data) {
+                        let result = JSON.parse(data)
+                        obj.input = "";
+                        obj.items = result
+                        obj.$refs.answer.focus();
+                    })
                 },
             },
         });
+
+        var getData = function(obj, search, callback) {
+            let xhr = new XMLHttpRequest();
+            xhr.onreadystatechange = function() {
+                if(xhr.readyState === xhr.DONE) {
+                    if(xhr.status === 200 || xhr.status === 201) {
+                        callback(obj, xhr.responseText)
+                    }
+                }
+            }
+            let url = "http://localhost:8000/v1/search";
+            switch(search.length) {
+                case 0:
+                    break;
+                case 1:
+                    url += "/" + search[0]
+                    break;
+                case 2:
+                    url += "/" + search[0] + "/" + search[1]
+            }
+
+            xhr.open('GET', url)
+            xhr.send()
+        }
     </script>
 </html>
