@@ -6,8 +6,8 @@
     <body>
         <div id="root">
             <form v-on:submit="test">
-                <div>우리 동네에 코로나 환자가 지나갔을까? </div>
-                <input type="text" ref="answer" v-model="input"> <button type="submit" >입력</button>
+                <div>우리 동네에 신종 코로나 환자가 지나갔을까? </div>
+                <input type="text" ref="answer" v-model="input" placeholder="성남 분당"> <button type="submit" >입력</button>
                 <div>
                     <ul>
                         <li v-for="item in items">
