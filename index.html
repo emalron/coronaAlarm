@@ -38,6 +38,9 @@
                     let inputs = this.input.split(' ').slice(0,2) 
                     getData(this, inputs, function(obj, data) {
                         let result = JSON.parse(data)
+                        for(var i=0; inputs.length; i++) {
+                            highlight(result, inputs[i])
+                        }
                         obj.input = "";
                         obj.items = result
                         obj.$refs.answer.focus();
@@ -68,6 +71,17 @@
 
             xhr.open('GET', url)
             xhr.send()
+        }
+
+        var highlight = function(data, search) {
+            let num = data.length
+            for (var i=0; i<num; i++) {
+                let route = data[i].route
+                let nroute = route.length
+                for (var j=0; j<nroute; j++) {
+                    route[j].split(search).join(`<span class="highlight">${search}</span>`)
+                }
+            }
         }
     </script>
 </html>
