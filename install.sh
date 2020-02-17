@@ -1,4 +1,3 @@
 #!/bin/bash
 
-cp ./index.html ~/web/
-./coronaAlarm
+cp -r ./web ~/web
