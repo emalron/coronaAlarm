@@ -1,0 +1,48 @@
+.highlight {
+    font-weight: bold;
+    color: red;
+}
+.title {
+    font-size: 3vw;
+}
+.plain-text {
+    font-size: 2vw;
+}
+.col-75 {
+    width:75%;
+    float: left;
+}
+.col-25 {
+    width:25%;
+    float: left;
+}
+input {
+    width: 100%;
+    padding: 12px;
+    resize: vertical;
+    border-radius: 4px;
+    box-shadow: none;
+}
+button {
+    width: 90%;
+    padding: 12px 20px;
+    border-radius: 4px;
+    float: right;
+    border: 0;
+    box-shadow: none;
+}
+ul {
+    padding-left: 1.2em;
+}
+.clear {
+    margin-top: 10px;
+    float: left;
+}
+@media screen and (max-width: 500px) {
+    .title {
+        font-size: 8vw;
+    }
+    .plain-text {
+        font-size: 5vw;
+    }
+}

@@ -1,57 +1,7 @@
 <html>
     <head>
         <meta name="viewport" content="width=device-width, initial-scale=1.0" charset="utf-8">
-        <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
-        <style>
-            .highlight {
-                font-weight: bold;
-                color: red;
-            }
-            .title {
-                font-size: 3vw;
-            }
-            .plain-text {
-                font-size: 2vw;
-            }
-            .col-75 {
-                width:75%;
-                float: left;
-            }
-            .col-25 {
-                width:25%;
-                float: left;
-            }
-            input {
-                width: 100%;
-                padding: 12px;
-                resize: vertical;
-                border-radius: 4px;
-                box-shadow: none;
-            }
-            button {
-                width: 90%;
-                padding: 12px 20px;
-                border-radius: 4px;
-                float: right;
-                border: 0;
-                box-shadow: none;
-            }
-            ul {
-                padding-left: 1.2em;
-            }
-            .clear {
-                margin-top: 10px;
-                float: left;
-            }
-            @media screen and (max-width: 500px) {
-                .title {
-                    font-size: 8vw;
-                }
-                .plain-text {
-                    font-size: 5vw;
-                }
-            }
-        </style>
+        <link rel="stylesheet" href="css/main.css" type="text/css">
     </head>
     <body>
         <div id="root">
@@ -68,7 +18,7 @@
                 <div class="clear">
                     <ul>
                         <li v-for="item in items">
-                            <p class="plain-text"><span>{{item.title}}</span></p>
+                            <p class="plain-text"><span>환자 #{{item.number}} ({{item.age}}세 {{item.sex}}, {{item.nationality}}) 확진일자: {{item.date}} 입원기관: {{item.hospital}}, 접촉자(격리자): {{item.Contacts}}({{item.Quarantine}})</span></p>
                             <ul>
                                 <li v-for="r in item.route">
                                     <p class="plain-text" v-html="r">{{r}}</p>
@@ -79,68 +29,7 @@
                 </div>
             </form>
         </div>
+        <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+        <script src="js/main.js"></script>
     </body>
-    <script>
-        const app = new Vue({
-            el: '#root',
-            data: {
-                items: [],
-                input: "",
-                result: "",
-            },
-            methods: {
-                test: function(e) {
-                    e.preventDefault();
-                    let inputs = this.input.split(' ').slice(0,2) 
-                    getData(this, inputs, function(obj, data, num) {
-                        let result = JSON.parse(data)
-                        for(var i=0; i<num; i++) {
-                            result = highlight(result, inputs[i])
-                        }
-                        obj.input = "";
-                        obj.items = result
-                        obj.$refs.answer.focus();
-                    })
-                },
-            },
-        });
-
-        var getData = function(obj, search, callback) {
-            let xhr = new XMLHttpRequest();
-            xhr.onreadystatechange = function() {
-                if(xhr.readyState === xhr.DONE) {
-                    if(xhr.status === 200 || xhr.status === 201) {
-                        callback(obj, xhr.responseText, search.length)
-                    }
-                }
-            }
-            let url = "http://api.emalron.com:8001/v1/search";
-            switch(search.length) {
-                case 0:
-                    break;
-                case 1:
-                    url += "/" + search[0]
-                    break;
-                case 2:
-                    url += "/" + search[0] + "/" + search[1]
-            }
-
-            xhr.open('GET', url)
-            xhr.send()
-        }
-
-        var highlight = function(data, search) {
-            console.log(`data: ${data}, num: ${data.length}`)
-            let num = data.length
-            for (var i=0; i<num; i++) {
-                let route = data[i].route
-                let nroute = route.length
-                for (var j=0; j<nroute; j++) {
-                    route[j] = route[j].split(search).join(`<span class="highlight">${search}</span>`)
-                    console.log(route[j])
-                }
-            }
-            return data
-        }
-    </script>
 </html>
