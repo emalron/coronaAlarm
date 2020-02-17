@@ -18,11 +18,11 @@ type Profile struct {
     Sex  string `json:"sex"`
     Nationality string `json:"nationality"`
     Age int `json:"age"`
-    Path string `json: "path"`
-    Date string `json: "date`
-    Hospital string `json: "hospital"`
-    Contacts int `json: "contacts"`
-    Quarantine int `json: "quarantine"`
+    Path string `json:"path"`
+    Date string `json:"date"`
+    Hospital string `json:"hospital"`
+    Contacts int `json:"contacts"`
+    Quarantine int `json:"quarantine"`
     Route []string `json:"route"`
 }
 

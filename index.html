@@ -1,6 +1,7 @@
 <html>
     <head>
         <meta name="viewport" content="width=device-width, initial-scale=1.0" charset="utf-8">
+        <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
         <link rel="stylesheet" href="css/main.css" type="text/css">
     </head>
     <body>
@@ -18,7 +19,7 @@
                 <div class="clear">
                     <ul>
                         <li v-for="item in items">
-                            <p class="plain-text"><span>환자 #{{item.number}} ({{item.age}}세 {{item.sex}}, 감염경로: {{item.path}} {{item.nationality}}) 확진일자: {{item.date}} 입원기관: {{item.hospital}}, 접촉자(격리자): {{item.Contacts}}({{item.Quarantine}})</span></p>
+                            <p class="plain-text"><span>환자 #{{item.number}} ({{item.age}}세 {{item.sex}},  {{item.nationality}}) 감염경로: {{item.path}}, 확진일자: {{item.date}} 입원기관: {{item.hospital}}, 접촉자(격리자): {{item.contacts}}({{item.quarantine}})</span></p>
                             <ul>
                                 <li v-for="r in item.route">
                                     <p class="plain-text" v-html="r">{{r}}</p>
@@ -29,7 +30,6 @@
                 </div>
             </form>
         </div>
-        <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
-        <script src="js/main.js"></script>
+       <script src="js/main.js"></script>
     </body>
 </html>

@@ -17,3 +17,4 @@ headerMiddleWare	main.go	/^func headerMiddleWare(h http.Handler) http.Handler {$
 main	main.go	/^func main() {$/;"	f
 main	main.go	/^package main$/;"	p
 main	process.go	/^package main$/;"	p
+xhr.onreadystatechange	js/main.js	/^    let xhr = new XMLHttpRequest();$/;"	f
