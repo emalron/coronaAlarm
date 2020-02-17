@@ -7,8 +7,9 @@
 File	process.go	/^type File struct {$/;"	t
 Filter	process.go	/^func Filter(data []Profile, index string) []Profile {$/;"	f
 GetData	process.go	/^func GetData() []Profile {$/;"	f
+GetPage	process.go	/^func GetPage(url string) *goquery.Document {$/;"	f
+MakeFileArray	process.go	/^func MakeFileArray(document *goquery.Document) []File {$/;"	f
 MakeJSONString	main.go	/^func MakeJSONString(data []Profile) string {$/;"	f
-PrintCon	process.go	/^func PrintCon(f *File) {$/;"	f
 Profile	process.go	/^type Profile struct {$/;"	t
 SelectorToData	process.go	/^func SelectorToData(f *File) Profile {$/;"	f
 callback	main.go	/^func callback(w http.ResponseWriter, r *http.Request) {$/;"	f

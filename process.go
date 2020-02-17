@@ -1,10 +1,10 @@
 package main
 
 import(
-    "fmt"
     "net/http"
     "github.com/PuerkitoBio/goquery"
     "strings"
+    "strconv"
     "log"
 )
 
@@ -13,32 +13,62 @@ type File struct {
     body *goquery.Selection
 }
 
-func PrintCon(f *File) {
-    fmt.Println(f.head.Text())
-    f.body.Each(func(i int, s *goquery.Selection) {
-        fmt.Println(s.Text())
-    })
-}
-
 type Profile struct {
-    Title string `json:"title"`
+    Number int `json:"number"`
+    Sex  string `json:"sex"`
+    Nationality string `json:"nationality"`
+    Age int `json:"age"`
+    Path string `json: "path"`
+    Date string `json: "date`
+    Hospital string `json: "hospital"`
+    Contacts int `json: "contacts"`
+    Quarantine int `json: "quarantine"`
     Route []string `json:"route"`
 }
 
 func SelectorToData(f *File) Profile {
     profile := Profile{}
-    profile.Title = f.head.Text()
-    profile.Route = make([]string, 0)
-    f.body.Each(func(i int, s *goquery.Selection) {
-        s.Children().Each(func(n int, so *goquery.Selection) {
-            profile.Route = append(profile.Route, so.Text())
-        })
+    f.head.Each(func(k int, s *goquery.Selection) {
+        tag := s.Find("span").First().Text()
+        context := s.Find("span").Last().Text()
+        if strings.Contains(tag, "환자번호") {
+            profile.Number, _ = strconv.Atoi(context)
+        } else if strings.Contains(tag, "인적사항") {
+            t1 := strings.Replace(context, "(", "", 1)
+            t2 := strings.Replace(t1, ")", "", 1)
+            t3 := strings.Replace(t2, ",", "", 1)
+            t4 := strings.Replace(t3, "'", "", 1)
+            text := strings.Split(t4, " ")
+            profile.Sex = text[0]
+            profile.Nationality = text[1]
+            profile.Age, _ = strconv.Atoi(text[2])
+        } else if strings.Contains(tag, "감염경로") {
+            profile.Path = context
+        } else if strings.Contains(tag, "확진일자") {
+            t1 := strings.Join(strings.Split(context, "\n"), "")
+            t2 := strings.Join(strings.Split(t1, "\t"), "")
+            profile.Date = t2
+        } else if strings.Contains(tag, "입원기관") {
+            profile.Hospital = context
+        } else if strings.Contains(tag, "접촉자수") {
+            t1 := strings.Replace(context, "(", "", 1)
+            t2 := strings.Replace(t1, ")", "", 1)
+            t3 := strings.Split(t2, " ")
+            profile.Contacts, _ = strconv.Atoi(t3[0])
+            profile.Quarantine, _ = strconv.Atoi(t3[1])
+        }
     })
+    routes := make([]string, 0)
+    f.body.Each(func(k int, s *goquery.Selection) {
+        routes = append(routes, s.Text())
+    })
+    profile.Route = routes
+
     return profile
 }
 
-func GetData() []Profile {
-    res, err := http.Get("http://ncov.mohw.go.kr/bdBoardList.do?brdId=1&brdGubun=12")
+func GetPage(url string) *goquery.Document {
+    res, err := http.Get(url)
     if err != nil {
         log.Fatal(err)
     }
@@ -50,29 +80,31 @@ func GetData() []Profile {
     if err != nil {
         log.Fatal(err)
     }
+    return doc
+}
 
-    indexes := make([]int, 0)
-    body := doc.Find("h5").Siblings()
-    body.Each(func(i int, s *goquery.Selection) {
-        if s.HasClass("s_title_in3") {
-            indexes = append(indexes, i)
-        }
-    })
-
+func MakeFileArray(document *goquery.Document) []File {
     files := make([]File, 0)
-    for i:=0; i<len(indexes)-1; i++ {
-        file := File{body.Eq(indexes[i]), body.Slice(indexes[i]+1, indexes[i+1])}
-        files = append(files, file)
-    }
-    fi := File{body.Eq(indexes[len(indexes)-1]), body.Slice(indexes[len(indexes)-1]+1, body.Size())}
-    files = append(files, fi)
+    context := document.Find(".in_list")
+    context.Each(func(i int, s *goquery.Selection) {
+        s.Find(".onelist").Each(func(j int, s *goquery.Selection) {
+            head := s.Find(".info_s li")
+            body := s.Find(".info_mtxt .s_listin_dot li")
+            file := File{head, body}
+            files = append(files, file)
+        })
+    })
+    return files
+}
 
+func GetData() []Profile {
+    doc := GetPage("http://ncov.mohw.go.kr/bdBoardList.do?brdId=1&brdGubun=12")
+    files := MakeFileArray(doc)
     output := make([]Profile, 0)
     for _, v := range files {
         o := SelectorToData(&v)
         output = append(output, o)
     }
-
     return output
 }
 
